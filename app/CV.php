@@ -2,7 +2,8 @@
 
 namespace app;
 
-class CV {
+class CV
+{
     const ITEM = 'item';
     const LIST = 'list';
     const DATA = 'data';
@@ -11,47 +12,57 @@ class CV {
     public $data1 = [];
 
 
-    public function __construct($data1)
+    /*  public function __construct($data1)
+      {
+          $this->data1 = $data1;
+      }*/
+
+    public function buildHead($data)
     {
-        $this->data1 = $data1;
-    }
-    public function buildHead()
-    {
-        $head = array();
-        foreach ($this->data1 as $data) {
-            $head[$data['destination']] = Consol::colorizeWeb($data['title'], 'red');
-        }
+
+
+        $head = Consol::colorizeWeb($data['title'], 'red');
 
         return $head;
     }
-    public function buildContent()
+
+    public function buildContent($a)
     {
-        $d = '';
-       foreach ($this->data1 as $line) {
+        $d = [];
 
-       //  var_dump($line) ;
-           $label = isset($line['label']) ? $line['label'] : '';
-if (is_array($line['data'])){
-            switch ($line["data"]) {
-                case self::ITEM:
-                    $d .= '<b>'. Consol::colorizeWeb($label, 'red').'</b>'. ': '. implode(', ', $line['data']). "</br>";
-                    break;
-                case self::LIST:
-                    foreach ($line['data'] as $key => $value) {
-                        $list = is_array($value) ? implode(', ', $value) : $value;
-                        $d .= $key .': '. $list . "</br>";
-                    }
-                    break;
-                default:
-                    if ($label == '') {
-                        $d .= '<b>'.Consol::colorizeWeb($label, 'green').'</b>'.  $line['data']. "</br>";
-                    }
-                    else  { $d .= '<b>'.Consol::colorizeWeb($label, 'green').'</b>'.': '. $line['data']. "</br>"; }
+        if (is_array($a)) {
+            foreach ($a as $b) {
+                if (is_array($b)) {
+
+                $label = isset($b['label']) ? $b['label'] : '';
+
+
+                switch ($b['data']) {
+                    case self::ITEM:
+                        $d .= '<b>' . Consol::colorizeWeb($label, 'yellow') . '</b>' . ': ' . implode(', ', $b['data']) . "</br>";
+                        break;
+                    case self::LIST:
+                        foreach ($b['data'] as $key => $value) {
+                            $list = is_array($value) ? implode(', ', $value) : $value;
+                            $d .= $key . ': ' . $list . "</br>";
+                        }
+                        break;
+                    default:
+                        if ($label == '') {
+                            $d .= '<b>' . Consol::colorizeWeb($label, 'green') . '</b>' . $b['data'] . "</br>";
+                        } else {
+                            $d .= '<b>' . Consol::colorizeWeb($label, 'green') . '</b>' . ': ' . $b['data'] . "</br>";
+                        }
+                }
+
             }
+        }} else {
+            $d = NULL;
+        };
 
-        }}
-
+      if ($d !== 'Array'){echo $d;}
         return $d . PHP_EOL;
-    }
 
+
+    }
 }
